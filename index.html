@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KipFX — Practice Trade</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0c1019;color:#e8edf7;font-family:Arial,sans-serif}
+.top{height:64px;background:#111621;border-bottom:1px solid #252c3a;display:flex;align-items:center;padding:0 16px;gap:18px;position:sticky;top:0}
+.logo{font-weight:900;font-size:23px}.balance{margin-left:auto;background:#192131;padding:10px 15px;border-radius:9px}
+.tabs{display:flex;gap:8px;overflow:auto;background:#101521;padding:10px}.tab{min-width:125px;text-align:center;padding:13px;color:#9ba6ba;font-weight:700}.active{background:#151c29;border-radius:9px;color:white}
+.wrap{max-width:900px;margin:auto}.market{padding:14px 12px}.title{font-weight:700}.red{color:#ff4f67}.chart{height:300px;background:#101621;border-top:1px solid #202938;border-bottom:1px solid #202938;position:relative;overflow:hidden}
+svg{width:100%;height:100%}.price{position:absolute;right:5px;top:46%;background:#ff4f67;padding:5px 8px;border-radius:4px;font-size:12px}
+.numbers{display:flex;gap:8px;overflow:auto;padding:12px}.num{min-width:55px;text-align:center;background:#131a27;border:1px solid #202b3d;border-radius:50%;padding:12px 5px;color:#aab4c5}.num.sel{border-color:#20d49a;color:#20d49a}
+.mode{display:flex;padding:8px 12px;border-top:1px solid #202938;border-bottom:1px solid #202938}.mode div{width:50%;text-align:center;padding:14px;color:#aab4c5;font-weight:800}.mode .chosen{background:#141b29;border-radius:8px;color:white}
+.amount{padding:15px 12px}.input{display:flex;align-items:center;justify-content:center;background:#121a28;border-radius:9px;padding:17px;font-size:23px;font-weight:800}.presets{display:flex;gap:8px;margin-top:9px;overflow:auto}.preset{min-width:72px;background:#121a28;padding:11px;text-align:center;border-radius:8px}.preset.selected{background:#153d3a;color:#27e0a1}
+.actions{display:flex;gap:10px;padding:8px 12px}.action{flex:1;border:0;border-radius:12px;padding:18px;color:white;font-size:18px;font-weight:900}.odd{background:#ff4f67}.even{background:#1ed48f}
+.note{padding:12px;color:#8793a9;font-size:12px;line-height:1.5}
+.section{border-top:1px solid #202938;padding:16px 12px}.section h3{margin:0 0 14px}.trade{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid #1d2635}.win{color:#27dc99}.loss{color:#ff667b}
+</style>
+</head>
+<body>
+<div class="top"><div class="logo">KipFX</div><div class="balance">Practice $10,000.00</div></div>
+<div class="wrap">
+<div class="tabs"><div class="tab">Matches/Differs</div><div class="tab active">Even/Odd</div><div class="tab">Over/Under</div></div>
+<div class="market"><div class="title">Volatility 10 (1s) Index <span class="red">−1.86%</span></div></div>
+<div class="chart">
+<svg viewBox="0 0 800 300" preserveAspectRatio="none">
+<defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-opacity=".25"/><stop offset="1" stop-opacity="0"/></linearGradient></defs>
+<path id="area" fill="url(#g)" d="M0 150 L30 175 L60 130 L90 190 L120 165 L150 205 L180 150 L210 180 L240 120 L270 195 L300 165 L330 185 L360 145 L390 170 L420 110 L450 165 L480 130 L510 180 L540 120 L570 205 L600 155 L630 175 L660 120 L690 170 L720 145 L750 190 L800 150 L800 300 L0 300Z"/>
+<polyline id="line" fill="none" stroke="#ff4f67" stroke-width="3" points="0,150 30,175 60,130 90,190 120,165 150,205 180,150 210,180 240,120 270,195 300,165 330,185 360,145 390,170 420,110 450,165 480,130 510,180 540,120 570,205 600,155 630,175 660,120 690,170 720,145 750,190 800,150"/>
+</svg><div class="price" id="price">4,916.29</div></div>
+<div class="numbers" id="nums"></div>
+<div class="mode"><div>AUTO</div><div class="chosen">MANUAL</div></div>
+<div class="amount"><div class="input">$ <span id="amt">5</span></div><div class="presets"><div class="preset">$1</div><div class="preset selected">$5</div><div class="preset">$10</div><div class="preset">$25</div><div class="preset">$50</div><div class="preset">$100</div></div></div>
+<div class="actions"><button class="action even" onclick="practice('Even')">Even <small>80%</small></button><button class="action odd" onclick="practice('Odd')">Odd <small>80%</small></button></div>
+<div class="note">Practice mode only. This interface is a visual learning simulator; it does not place real-money trades, bets, deposits, or withdrawals.</div>
+<div class="section"><h3>Transactions</h3><div id="history"><div class="trade"><span>No practice transactions yet.</span></div></div></div>
+</div>
+<script>
+const n=document.getElementById('nums');for(let i=0;i<10;i++)n.innerHTML+=`<div class="num ${i==3?'sel':''}">${i}<br><small>${(5+i*1.7).toFixed(1)}%</small></div>`;
+let bal=10000;
+function practice(side){const amt=5;const win=Math.random()>.45;bal+=win?amt*.8:-amt;document.querySelector('.balance').textContent='Practice $'+bal.toFixed(2);document.getElementById('history').insertAdjacentHTML('afterbegin',`<div class="trade"><span>${side} · $${amt.toFixed(2)}</span><span class="${win?'win':'loss'}">${win?'+$4.00 WIN':'-$5.00 LOSS'}</span></div>`)}
+setInterval(()=>{let p=4916.29+(Math.random()-.5)*12;document.getElementById('price').textContent=p.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})},1200);
+</script>
+</body></html>
